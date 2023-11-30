@@ -1,0 +1,30 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: argocdlight
+placementBindingDefaults:
+  name: setup-argocdlight-binding
+policyDefaults:
+  namespace: policies
+  placement:
+    placementName: setup-argocdlight-placement
+  remediationAction: enforce
+  policySets:
+  - setup-argocd-minimal
+  severity: medium
+  ignorePending: true
+policies:
+  - name: policy-argocd-namespace
+    manifests:
+      - path: input/namespace
+    remediationAction: enforce
+  - name: policy-setup-argocdlight
+    manifests:
+      - path: input/argocdlight
+    remediationAction: enforce
+    dependencies:
+    - name: "policy-argocd-namespace"
+      compliance: "Compliant"
+      kind: "Policy"
+
+   
